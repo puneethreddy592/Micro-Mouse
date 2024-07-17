@@ -11,6 +11,7 @@
 #define ena 11
 
 unsigned long nend, nstart;
+
 void setup() {
   pinMode(trigl, OUTPUT);
   pinMode(echol, INPUT);
@@ -58,6 +59,7 @@ int checkShape() {
   int leftDist = Lside();
   int rightDist = Rside();
   int frontDist = Fside();
+  
   Serial.print("Left Distance: ");
   Serial.print(leftDist);
   Serial.print(" cm\t");
@@ -98,108 +100,104 @@ int checkShape() {
 }
 
 void moveForward() {
-  int L=0;
-  int R=0;
-  while(1)
-  {
-  int shapee = checkShape();
-  L=Lside();
-  R=Rside();
-  if(((R>3)&&(R<6))||((L<6)&&(3<L))){
-   digitalWrite(Rm1, HIGH);
-   digitalWrite(Rm3, LOW);
-   analogWrite(Lm2, 235);
-   analogWrite(Lm4, 0);
-   analogWrite(ena, 80);
-   delay(100);
-   
+  int L = 0;
+  int R = 0;
+  while (true) {
+    int shapee = checkShape();
+    L = Lside();
+    R = Rside();
+    if (((R > 3) && (R < 6)) || ((L < 6) && (3 < L))) {
+      digitalWrite(Rm1, HIGH);
+      digitalWrite(Rm3, LOW);
+      analogWrite(Lm2, 235);
+      analogWrite(Lm4, 0);
+      analogWrite(ena, 80);
+      delay(100);
+    } else if (R > L) {
+      digitalWrite(Rm1, HIGH);
+      digitalWrite(Rm3, LOW);
+      analogWrite(Lm2, 235);
+      analogWrite(Lm4, 0);
+      int d = 2 * (R - L);
+      d = 105 - d;
+      Serial.print("R");
+      Serial.println(d);
+      analogWrite(ena, d);
+    } else if (L > R) {
+      digitalWrite(Rm1, HIGH);
+      digitalWrite(Rm3, LOW);
+      analogWrite(Lm2, 235);
+      analogWrite(Lm4, 0);
+      int d = 2 * (L - R);
+      d = 127 + d;
+      Serial.print("L");
+      Serial.println(d);
+      analogWrite(ena, d);
+    } else {
+      digitalWrite(Rm1, HIGH);
+      digitalWrite(Rm3, LOW);
+      analogWrite(Lm2, 235);
+      analogWrite(Lm4, 0);
+      analogWrite(ena, 80);
+    }
+    if (shapee != 8 && shapee != 5) {
+      break;
+    }
   }
-  else if(R>L){
-   digitalWrite(Rm1, HIGH);
-   digitalWrite(Rm3, LOW);
-   analogWrite(Lm2, 235);
-   analogWrite(Lm4, 0);
-   int d =2*(R-L);
-   d=105-d;
-   //delay(10);
-   Serial.print("R");
-   Serial.println(d);
+}
 
-   analogWrite(ena, d);
-  }else if(L>R){
-  digitalWrite(Rm1, HIGH);
-  digitalWrite(Rm3, LOW);
-  analogWrite(Lm2, 235);
-  analogWrite(Lm4, 0);
-  int d=2*(L-R);
-  d=127+d;
-  //delay(10);
-  Serial.print("L");
-  Serial.println(d);
-  analogWrite(ena,d);
-  }else{digitalWrite(Rm1, HIGH);
-   digitalWrite(Rm3, LOW);
-   analogWrite(Lm2, 235);
-   analogWrite(Lm4, 0);
-   analogWrite(ena, 80);
-  }
-  if(shapee !=8 || shapee !=5){
-    break;
-  }
-  
-}
-}
-void justmovefwd(){
+void justmovefwd() {
   digitalWrite(Rm1, HIGH);
   digitalWrite(Rm3, LOW);
   analogWrite(Lm2, 235);
   analogWrite(Lm4, 0);
   analogWrite(ena, 80);
 }
-void tr(){
-  nstart=millis();
-  nend=millis();
-  while((nend-nstart)<=1025)
-{
-  digitalWrite(Rm1,LOW);
-  digitalWrite(Rm3,LOW);
-  analogWrite(Lm2,235);
-  analogWrite(Lm4,0);
-  nend=millis();
+
+void tr() {
+  nstart = millis();
+  nend = millis();
+  while ((nend - nstart) <= 1025) {
+    digitalWrite(Rm1, LOW);
+    digitalWrite(Rm3, LOW);
+    analogWrite(Lm2, 235);
+    analogWrite(Lm4, 0);
+    nend = millis();
+  }
 }
+
+void tl() {
+  nstart = millis();
+  nend = millis();
+  while ((nend - nstart) <= 800) {
+    digitalWrite(Rm1, HIGH);
+    digitalWrite(Rm3, LOW);
+    digitalWrite(Lm2, LOW);
+    digitalWrite(Lm4, LOW);
+    nend = millis();
+  }
 }
-void tl(){
-  nstart=millis();
-  nend=millis();
-  while((nend-nstart)<=800)
- {
-  digitalWrite(Rm1,HIGH);
-  digitalWrite(Rm3,LOW);
-  digitalWrite(Lm2,LOW);
-  digitalWrite(Lm4,LOW);
-  nend=millis();
- }
+
+void ut() {  // U-turn
+  nstart = millis();
+  nend = millis();
+  while ((nend - nstart) <= 850) {
+    digitalWrite(Rm1, HIGH);
+    digitalWrite(Rm3, LOW);
+    analogWrite(Lm2, 0);
+    analogWrite(Lm4, 235);
+    nend = millis();
+  }
 }
-void ut()// U turn
-{
-  nstart=millis();
-nend=millis();
-while((nend-nstart)<=850)
-{
-  digitalWrite(Rm1,HIGH);
-  digitalWrite(Rm3,LOW);
-  analogWrite(Lm2,0);                            
-  analogWrite(Lm4,235);
-  nend=millis();
-}
-}
-void moveback(){
-  digitalWrite(Rm1,LOW);
-  digitalWrite(Rm3,HIGH);
-  digitalWrite(Lm2,LOW);
-  digitalWrite(Lm4,HIGH);
+
+void moveback() {
+  digitalWrite(Rm1, LOW);
+  digitalWrite(Rm3, HIGH);
+  digitalWrite(Lm2, LOW);
+  digitalWrite(Lm4, HIGH);
   analogWrite(ena, 120);
 }
+
 void utr() {
   int ld = 0;
   int rd = 0;
@@ -207,53 +205,43 @@ void utr() {
 
   while (x) {
     Serial.println("utr 1");
-
-    // Read sensor values for the left and right sides
     ld = Lside();
     rd = Rside();
 
     if (ld < 15 || rd < 15) {
-      if(rd>ld){
-      digitalWrite(Rm1, LOW);  // Reverse right motor
-      digitalWrite(Rm3, HIGH); // Reverse left motor
-      digitalWrite(Lm2, LOW);
-      digitalWrite(Lm4, HIGH);
+      if (rd > ld) {
+        digitalWrite(Rm1, LOW);  // Reverse right motor
+        digitalWrite(Rm3, HIGH); // Reverse left motor
+        digitalWrite(Lm2, LOW);
+        digitalWrite(Lm4, HIGH);
 
-      // Adjust the motor speed based on the sensor readings
-      int d = 2*(rd - ld);  // Speed adjustment based on the difference
-      d=127-d;
-      analogWrite(ena, 127) ;  // You can adjust the speed control here
-      }else{
-       int d = (ld- rd);  
-       d=d+127;
-        analogWrite(ena, 127 );  
+        int d = 2 * (rd - ld);  // Speed adjustment based on the difference
+        d = 127 - d;
+        analogWrite(ena, 127);  // Adjust speed control here
+      } else {
+        int d = (ld - rd);
+        d = d + 127;
+        analogWrite(ena, 127);
         delay(150);
       }
       Serial.println("utr 2");
     } else {
-      // If both sensor readings are greater than or equal to 15, exit the loop
-      x = 0;
+      x = 0;  // Exit loop if both readings are greater than or equal to 15
       Serial.println("utr 3");
     }
   }
 
-  // Stop the motors
   stopMotors();
 
-  // Set motor control pins for a brief delay while moving backward
   digitalWrite(Rm1, LOW);  // Reverse right motor
   digitalWrite(Rm3, HIGH); // Reverse left motor
   digitalWrite(Lm2, LOW);
   digitalWrite(Lm4, HIGH);
-
-  analogWrite(ena, 127 );  
+  analogWrite(ena, 127);
   delay(150);
-  
 
-  // Stop the motors again
   stopMotors();
 
-  // Decide whether to turn right or left based on the 'rd' value
   if (rd > 15) {
     turnRight();
   } else {
@@ -263,67 +251,63 @@ void utr() {
 
 void turnRight() {
   tr();
-  while(((nend-nstart)/1000)<=0.5)
-{
-  digitalWrite(Rm1,HIGH);
-  digitalWrite(Rm3,LOW);
-  digitalWrite(Lm2,HIGH);
-  digitalWrite(Lm4,LOW);
-  analogWrite(ena, 120);
-  nend=millis();
-}
- //movebackforturn();
- moveback();
- delay(220);
+  while (((nend - nstart) / 1000) <= 0.5) {
+    digitalWrite(Rm1, HIGH);
+    digitalWrite(Rm3, LOW);
+    digitalWrite(Lm2, HIGH);
+    digitalWrite(Lm4, LOW);
+    analogWrite(ena, 120);
+    nend = millis();
+  }
+  moveback();
+  delay(220);
 }
 
 void turnLeft() {
   tl();
-  while(((nend-nstart)/1000)<=0.5)
-{
-  digitalWrite(Rm1,HIGH);
-  digitalWrite(Rm3,LOW);
-  digitalWrite(Lm2,HIGH);
-  digitalWrite(Lm4,LOW);
-  analogWrite(ena, 120);
-  nend=millis();
+  while (((nend - nstart) / 1000) <= 0.5) {
+    digitalWrite(Rm1, HIGH);
+    digitalWrite(Rm3, LOW);
+    digitalWrite(Lm2, HIGH);
+    digitalWrite(Lm4, LOW);
+    analogWrite(ena, 120);
+    nend = millis();
+  }
+  moveback();
+  delay(220);
 }
- //movebackforturn();
- moveback();
- delay(220);
-}
+
 void uTurn() {
   ut();
-  while(((nend-nstart)/1000)<=0.5)
-{
-  digitalWrite(Rm1,HIGH);
-  digitalWrite(Rm3,LOW);
-  digitalWrite(Lm2,HIGH);
-  digitalWrite(Lm4,LOW);
-  analogWrite(ena, 120);
-  nend=millis();
+  while (((nend - nstart) / 1000) <= 0.5) {
+    digitalWrite(Rm1, HIGH);
+    digitalWrite(Rm3, LOW);
+    digitalWrite(Lm2, HIGH);
+    digitalWrite(Lm4, LOW);
+    analogWrite(ena, 120);
+    nend = millis();
+  }
 }
-}
+
 void stopMotors() {
-  // Stop the motors by setting all motor pins to LOW
   digitalWrite(Rm1, LOW);
   digitalWrite(Rm3, LOW);
   digitalWrite(Lm2, LOW);
   digitalWrite(Lm4, LOW);
 }
-void movebackforturn(){
-  digitalWrite(Rm1,LOW);
-  digitalWrite(Rm3,HIGH);
-  digitalWrite(Lm2,LOW);
-  digitalWrite(Lm4,HIGH);
+
+void movebackforturn() {
+  digitalWrite(Rm1, LOW);
+  digitalWrite(Rm3, HIGH);
+  digitalWrite(Lm2, LOW);
+  digitalWrite(Lm4, HIGH);
   analogWrite(ena, 120);
   delay(150);
-
 }
 
 void loop() {
   int shape = checkShape();
-  int L=0;
+  int L = 0;
   if (shape == 8 || shape == 6) {
     stopMotors();
     moveForward();
@@ -333,26 +317,25 @@ void loop() {
     moveForward();
     delay(100);
     turnRight();
-  } else if(shape ==1 || shape == 2 || shape == 5 || shape == 4){
-    
+  } else if (shape == 1 || shape == 2 || shape == 5 || shape == 4) {
     stopMotors();
     delay(500);
     moveForward();
     delay(100);
-    int x=1;
-    while(x){
-    L=Lside();
-    if(L<38&& L>30){
-    justmovefwd();
-    }else{turnLeft();
-    x=0;
-    }}
-  }else {
+    int x = 1;
+    while (x) {
+      L = Lside();
+      if (L < 38 && L > 30) {
+        justmovefwd();
+      } else {
+        turnLeft();
+        x = 0;
+      }
+    }
+  } else {
     Serial.println("utr");
     stopMotors();
     delay(100);
     utr();
-    
-  } 
-
+  }
 }
