@@ -194,6 +194,22 @@ void stop() // stops the device
 * shape() determines the current shape based on sensor readings.
 * tellval() and telldir() determine movement magnitude and direction based on z.
 * fwd(), Tr(), Tl(), uT(), stop() perform forward movement, right turn, left turn, U-turn, and stop respectively.
+int shape()
+* Purpose: Determines the type of shape based on sensor readings (left, right, and front distances).
+* Functionality:
+   * Checks distances from ultrasound sensors to classify the current environment shape.
+   * Returns an integer corresponding to the detected shape type.
+   * Outputs shape names to the serial monitor for debugging and monitoring.
+int tellval(int a)
+* Purpose: Computes the magnitude of movement based on the current direction (z).
+* Functionality:
+   * Adjusts movement magnitude based on whether the robot is moving forward (z = 4 or 1) or backward (z = 2 or 3).
+   * Returns a positive or negative value depending on the direction (z).
+char telldir(int b)
+* Purpose: Determines the direction character based on the current direction (z).
+* Functionality:
+   * Maps the current direction value (z) to a character ('i' or 'j') representing the movement direction.
+   * Returns the character representing the current movement direction.
 
 <b> Turn and Loop Handling Functions </b>
 
@@ -305,6 +321,20 @@ int absval(int val) // returns absolute value
 
 * TurnR(), TurnL(), TurnU() execute turns and measure distance moved during turns.
 * loopval(), modval(), absval() handle loop detection and absolute value calculations.
+int loopval()
+* Purpose: Determines the type of loop (if any).
+* Functionality:
+    * Analyzes past movements (fwdl[]) to detect if the robot has returned to a previous point (loop).
+    * Checks direction changes (dir[]) to confirm loop closure.
+    * Returns 1 for a closed loop without openings, 2 for a closed loop with openings, or 0 for no loop detected.
+int modval(int m)
+* Purpose: Computes the absolute value of m.
+* Functionality:
+    * Returns the absolute value of the input integer m.
+int absval(int val)
+* Purpose: Computes the absolute value of val.
+* Functionality:
+    * Returns the absolute value of the input integer val.
 
 <b> Path Following Functions </b>
 
@@ -391,6 +421,25 @@ void follow() // overall follow path
 ```
 
 * moveExcept(), finddir(), guessdir(), follow() implement specific path following behaviors based on current shape and conditions.
+void moveExcept()
+* Purpose: Moves the robot except when returning back from where it came.
+* Functionality:
+    * Handles specific turning behaviors (TurnR() and TurnL()) based on current shape (3, 4, 2, 6).
+void finddir()
+* Purpose: Finds the next direction to move.
+* Functionality:
+    * Executes right turns (TurnR()) until a suitable path (1 or 5) is found.
+    * Executes forward movements (fwd()) when no immediate turns are required.
+void guessdir()
+* Purpose: Guesses the direction in case of no particular shape.
+* Functionality:
+    * Executes forward movements (fwd()) if the front distance (Fside()) is clear.
+    * Executes left or right turns (TurnL() or TurnR()) based on left distance (Lside()).
+void follow()
+* Purpose: Implements the overall path following logic.
+* Functionality:
+    * Executes sequences of turns (TurnR(), TurnL(), TurnU()) and forward movements (fwd()).
+    * Stops the robot (stop()) if a closed loop (loopval() == 1 or 2) is detected.
 
 <b> Setup and Loop Functions </b>
 
