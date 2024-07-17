@@ -412,7 +412,7 @@ void guessdir(int p)// dwepending on value of z it would move on 2nd trial
     valchange(f);
   }
 }
-/*void follow(int a, int b)// depending on fwdl stack and dir stack it moves by changing vlue of z
+void follow(int a, int b)// depending on fwdl stack and dir stack it moves by changing vlue of z
 { 
   if(a==b)
 {
@@ -436,7 +436,7 @@ void guessdir(int p)// dwepending on value of z it would move on 2nd trial
   }
  g++;
  follow();
-}*/
+}
 void setup()
 {
   pinMode(13,OUTPUT);
@@ -456,13 +456,13 @@ void setup()
 
 void loop()
 {
- /* Serial.println("R");
+ Serial.println("R");
   Serial.println(Rside());
   Serial.println("L");
   Serial.println(Lside());
    Serial.println("F");
-  Serial.println(Fside());*/
- /* Serial.println(shape());// depending upon type of opening it decides to move
+  Serial.println(Fside());
+ Serial.println(shape());// depending upon type of opening it decides to move
   if(shape()==8)
   {
     fwd();
@@ -504,10 +504,10 @@ void loop()
     TurnR();
         
    // indpt[ind]=ind;
-  }*/
+  }
   // depending on the kind of loop (in case it is inside a loop)the folowing code will take action 
 
-/*if(loopval()==1)// depending on the kind of loop 
+if(loopval()==1)// depending on the kind of loop 
 {
   if((shape()==1)||(shape()==2)||(shape()==5)||(shape()==6))
   {
@@ -535,6 +535,6 @@ else if((looper==1)&&((shape()==5)||(shape()==6)))
     fwd();
   }
   looper=0;
-}*/
+}
 Serial.println(Lside());
 }
